@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>File: README</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+  <div id="fileHeader">
+    <h1>README</h1>
+    <table class="header-table">
+    <tr class="top-aligned-row">
+      <td><strong>Path:</strong></td>
+      <td>README
+      </td>
+    </tr>
+    <tr class="top-aligned-row">
+      <td><strong>Last Update:</strong></td>
+      <td>Tue Sep 09 19:15:22 +0200 2008</td>
+    </tr>
+    </table>
+  </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <h1>Currency Exchange Plugin for Rails Version 2.1.0</h1>
+<p>
+This Plugin converts an amount of money from one currency to another.
+</p>
+<p>
+You can convert from and to any of the following currencies:
+</p>
+<p>
+EUR, USD, JPY, BGN, CZK, DKK, EEK, GBP, HUF, LTL, LVL, PLN, RON, SEK, SKK,
+CHF, ISK, NOK, HRK, RUB, TRY, AUD, BRL, CAD, CNY, HKD, IDR, KRW, MXN, MYR,
+NZD, PHP, SGD, THB, ZAR
+</p>
+<p>
+As you should not work with fractions when handling money, the converter
+expects you to pass it amount of money in its smallest unit. The result
+will be returned as an integer.
+</p>
+<ul>
+<li>The plugin uses the exhange rates published by the European Bank.
+
+</li>
+<li>The exchange rates are updated automatically once a day on demand.
+
+</li>
+</ul>
+<h2>Example</h2>
+<h3>Here the syntax:</h3>
+<p>
+<tt><a
+href="../classes/CurrencyExchange.html#M000007">converted_money=CurrencyExchange.currency_exchange</a>(amount,
+&quot;from_currency&quot;, &quot;to_currency&quot;)</tt>
+</p>
+<h3>Here an example:</h3>
+<p>
+<tt><a
+href="../classes/CurrencyExchange.html#M000007">converted_money=CurrencyExchange.currency_exchange</a>(100,
+&quot;USD&quot;, &quot;EUR&quot;)</tt>
+</p>
+<h4>If you leave out &quot;to_currency&quot;, the currency given will be converted into &quot;EUR&quot;</h4>
+<p>
+<tt><a
+href="../classes/CurrencyExchange.html#M000007">euro_amount=CurrencyExchange.currency_exchange</a>(100,&quot;USD&quot;)</tt>
+</p>
+<h4>Of course you can convert between any combination of currencies</h4>
+<p>
+<tt><a
+href="../classes/CurrencyExchange.html#M000007">converted_amount=CurrencyExchange.currency_exchange</a>(100,&quot;HUF&quot;,&quot;CAD&quot;)</tt>
+</p>
+<h2>Installation Guide</h2>
+<p>
+Go to the root directory of you app and type:
+</p>
+<p>
+<tt>ruby script/plugin install
+git://github.com/jasonfranklin-stokes/currencyexchange.git</tt>
+</p>
+<p>
+after that you should make an ExchangeRate model as follows:
+</p>
+<p>
+ruby script/generate model ExchangeRate
+</p>
+<p>
+open the xxxxxxxxxxxxxx_create_exchange_rates.rb file in your
+app/db/migrate directory and edit it to look like this:
+</p>
+<p>
+###################################################
+</p>
+<p>
+class CreateExchangeRates &lt; ActiveRecord::Migration
+</p>
+<pre>
+  def self.up
+    create_table :exchange_rates do |t|
+      t.string :base_currency
+      t.string :currency
+      t.float :rate
+      t.date :issued_on
+      t.timestamps
+    end
+  end
+
+  def self.down
+    drop_table :exchange_rates
+  end
+</pre>
+<p>
+end
+</p>
+<p>
+###################################################
+</p>
+<p>
+Then, from the root directory of our app, type:
+</p>
+<p>
+<tt>rake db:migrate</tt>
+</p>
+<p>
+From now on, you should be able to use call <a
+href="../classes/CurrencyExchange.html#M000007">CurrencyExchange.currency_exchange</a>
+from within your rails applicaion.
+</p>
+<h2>Documentation</h2>
+<p>
+All the documentation you need should be in the README file (this is what
+you are reading now). You should find the documentation in the rdoc folder
+of the currency exchange plugin. From there you can open the index.html
+file in your browser. If not, you can try running: rake rdoc from the
+currency exchange folder, or rake doc:plugins from the root folder fo your
+application.
+</p>
+<h2>Plugin Tests</h2>
+<p>
+unit testing should pass, however, the plugin has been tested with RSpec.
+So if you want to run the tests, then you will need to install into your
+rails app.
+</p>
+<p>
+The RSpec tests will fail if you are not online.
+</p>
+<p>
+See install instruction here: <a
+href="http://github.com/dchelimsky/rspec-rails/wikis/home">github.com/dchelimsky/rspec-rails/wikis/home</a>
+The RSpec test are run using sqlite3 and an existing test.sqlite3 database
+in the db folder of the application
+</p>
+<h2>Some things to note</h2>
+<p>
+You can be online or offline using this plugin. If you are offline while
+using the plugin for the first time, it will fallback on to an internal
+.xml file with old exchange rates.
+</p>
+<p>
+As soon as it is online, and has the current exchange rates it will only
+update them once a day directly from the European Bank.
+</p>
+<p>
+Should you go offline after that it will use the last exchange rates it
+recieved.
+</p>
+<p>
+Copyright (c) 2008 Jason Franklin-Stokes, <a
+href="http://jasonsrailsblog.blogspot.com">jasonsrailsblog.blogspot.com</a>/,
+released under the MIT license
+</p>
+
+    </div>
+
+
+   </div>
+
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

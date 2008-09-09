@@ -1,0 +1,100 @@
+=Currency Exchange Plugin v1 for Rails Version 2.1.0
+
+This Plugin converts an amount of money from one currency to another.
+
+You can convert from and to any of the following currencies:
+
+EUR, USD, JPY, BGN, CZK, DKK, EEK, GBP, HUF, LTL, LVL, PLN, RON, SEK, SKK, CHF, ISK,
+NOK, HRK, RUB, TRY, AUD, BRL, CAD, CNY, HKD, IDR, KRW, MXN, MYR, NZD, PHP, SGD, THB, ZAR
+
+As you should not work with fractions when handling money, 
+the converter expects you to pass it amount of money in its smallest unit.
+The result will be returned as an integer.
+
+- The plugin uses the exhange rates published by the European Bank.
+- The exchange rates are updated automatically once a day on demand.
+
+==Example
+
+===Here the syntax:
+
+<tt>converted_money=CurrencyExchange.currency_exchange(amount, "from_currency", "to_currency")</tt>
+
+===Here an example:
+
+<tt>converted_money=CurrencyExchange.currency_exchange(100, "USD", "EUR")</tt>
+
+====If you leave out "to_currency", the currency given will be converted into "EUR"
+
+<tt>euro_amount=CurrencyExchange.currency_exchange(100,"USD")</tt>
+
+====Of course you can convert between any combination of currencies
+
+<tt>converted_amount=CurrencyExchange.currency_exchange(100,"HUF","CAD")</tt>
+
+== Installation Guide
+
+Go to the root directory of you app and type:
+
+<tt>ruby script/plugin install git://github.com/jasonfranklin-stokes/currencyexchange.git</tt>
+
+after that you should make an ExchangeRate model as follows:
+
+ruby script/generate model ExchangeRate
+
+open the xxxxxxxxxxxxxx_create_exchange_rates.rb file in your app/db/migrate directory and edit it to look like this:
+
+
+###################################################
+
+class CreateExchangeRates < ActiveRecord::Migration
+  def self.up
+    create_table :exchange_rates do |t|
+      t.string :base_currency
+      t.string :currency
+      t.float :rate
+      t.date :issued_on
+      t.timestamps
+    end
+  end
+
+  def self.down
+    drop_table :exchange_rates
+  end
+end
+
+###################################################
+
+Then, from the root directory of our app, type:
+
+<tt>rake db:migrate</tt>
+
+From now on, you should be able to use call CurrencyExchange.currency_exchange from within your rails applicaion.
+
+== Documentation
+
+All the documentation you need should be in the README file (this is what you are reading now).
+You should find the documentation in the rdoc folder of the currency exchange plugin. From there you can open the index.html file in your browser.
+If not, you can try running: rake rdoc from the currency exchange folder, or
+rake doc:plugins from the root folder fo your application.
+
+== Plugin Tests
+
+unit testing should pass, however, the plugin has been tested with RSpec.
+So if you want to run the tests, then you will need to install into your rails app.
+
+The RSpec tests will fail if you are not online.
+
+See install instruction here: http://github.com/dchelimsky/rspec-rails/wikis/home
+The RSpec test are run using sqlite3 and an existing test.sqlite3 database in the db folder of the application
+
+==Some things to note
+
+You can be online or offline using this plugin.
+If you are offline while using the plugin for the first time, it will fallback on to an internal .xml file with old exchange rates.
+
+As soon as it is online, and has the current exchange rates it will only update them once a day directly from the European Bank.
+
+Should you go offline after that it will use the last exchange rates it recieved.
+
+Copyright (c) 2008 Jason Franklin-Stokes, http://jasonsrailsblog.blogspot.com/, released under the MIT license
