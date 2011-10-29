@@ -7,7 +7,7 @@ You can convert from and to any of the following currencies:
 EUR, USD, JPY, BGN, CZK, DKK, EEK, GBP, HUF, LTL, LVL, PLN, RON, SEK, SKK, CHF, ISK,
 NOK, HRK, RUB, TRY, AUD, BRL, CAD, CNY, HKD, IDR, KRW, MXN, MYR, NZD, PHP, SGD, THB, ZAR
 
-As you should not work with fractions when handling money, 
+As you should not work with fractions when handling money,
 the converter expects you to pass it amount of money in its smallest unit.
 The result will be returned as an integer.
 

@@ -13,16 +13,16 @@ require 'open-uri'
               self.issued_on=a_date
               self.save
           end
-        
+
        end
     end
   end
-           
+
  ####################################
  #
  ####################################
-    
-class CurrencyExchange 
+
+class CurrencyExchange
 
      NOT_POSSIBLE ="CURRENCY CONVERSION NOT POSSIBLE"
 
@@ -56,7 +56,7 @@ class CurrencyExchange
      end
 
  end
-     
+
  ####################################
  #
  ####################################
@@ -65,7 +65,7 @@ class CurrencyExchange
 
       XML_CURRENCY_URL = 'http://www.ecb.int/stats/eurofxref/eurofxref-daily.xml'
       XML_CURRENCY_FILE = File.dirname(__FILE__) + '/offline_exchange_rates.xml'
-      
+
       def self.request_rates(path)
          (xml = self.read_url_io(path) ) ? self.parse_rates_for_currency(xml) : nil
       end
@@ -79,7 +79,7 @@ class CurrencyExchange
       def self.request_file_name
         XML_CURRENCY_FILE
       end
-      
+
       def self.parse_rates_for_currency(xml)
           xml.elements.each("//Cube") do |item|
               if item.attributes["time"]
@@ -93,7 +93,7 @@ class CurrencyExchange
               end
          end
       end
-      
+
       def self.xml_date(a_date)
         res=ParseDate.parsedate(a_date)
         Time.local(*res)
@@ -102,5 +102,5 @@ class CurrencyExchange
       def self.read_url_io(url)
          begin REXML::Document.new(open(url) { |f| f.readlines.join("\n") }) rescue nil end
        end
-      
+
   end
