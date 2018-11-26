@@ -1,6 +1,5 @@
 =Currency Exchange Plugin v1 for Rails Version 2.1.0
 
-
 This Plugin converts an amount of money from one currency to another.
 
 You can convert from and to any of the following currencies:
